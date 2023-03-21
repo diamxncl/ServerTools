@@ -1,5 +1,3 @@
-su root
-
 clear
 figlet Setup
 echo ""
