@@ -1,3 +1,5 @@
+sudo apt-get install figlet -y > /dev/null
+
 clear
 figlet Setup
 echo ""

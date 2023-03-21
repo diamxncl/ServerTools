@@ -1,5 +1,6 @@
 #include <iostream>
 #include <conio.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -11,35 +12,51 @@ void banner () {
 int main () {
     //! DECLARACIÓN DE VARIABLES
 
-    char opt;
+    char opt[5] = {'a', 'a', 'a', 'a',};
 
     //! FIN DECLARACIÓN DE VARIABLES
 
-    system("clear");
-    cout << "Cargando...";
-    cout << endl;
-    system("sudo apt-get install figlet -y > /dev/null");
-
     banner();
+    cout << endl;
     cout << "1 // DHCP\n";
     cout << "2 // Backup\n";
     cout << "3 // ServerConfig\n";
     cout << "4 // FTP\n";
     cout << "5 // SSH\n";
     cout << "6 // Actualizar sistema\n";
+    cout << "\n7 // Salir";
 
-    opt = getch();
+    opt[0] = getch();
 
-    switch(opt) {
+    switch(opt[0]) {
         case '1': //- DHCP
             banner();
-            cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando DHCP..." << "\033[0m" << endl;
-            system("sudo apt-get install isc-dhcp-server -y > /dev/null");
-            system("sudo cp resources/dhcp-default /etc/default/isc-dhcp-server");
-            system("sudo cp resources/dhcp-etc /etc/dhcp/dhcpd.conf");
-            system("sudo systemctl restart isc-dhcp-server");
-            main();
-            break;
+            cout << "1 // Instalar y configurar DHCP" << endl;
+            cout << "2 // Comprobar estado de DHCP" << endl;
+            opt[1] = getch();
+            switch (opt[1]) {
+                case '1':
+                    banner();
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando DHCP..." << "\033[0m" << endl;
+                    system("sudo apt-get install isc-dhcp-server -y > /dev/null");
+                    system("sudo cp resources/dhcp-default /etc/default/isc-dhcp-server");
+                    system("sudo cp resources/dhcp-etc /etc/dhcp/dhcpd.conf");
+                    system("sudo systemctl restart isc-dhcp-server > /dev/null");
+                    main();
+                    break;
+                case '2': 
+                    banner();
+                    system("sudo systemctl status isc-dhcp-server");
+                    cout << "\n\nPresione cualquier botón para continuar...";
+                    getch();
+                    main();
+                    break;
+                default:
+                    cout << "Ha introducido un valor no válido" << endl;
+                    sleep(2);
+                    main();
+                    break;
+            }
         case '2': //- Backup
             banner();
                 cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Creando backup..." << "\033[0m" << endl;
@@ -50,30 +67,79 @@ int main () {
             break;
         case '4': //- FTP
             banner();
-                cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando FTP..." << "\033[0m" << endl;
-                system("sudo apt-get install vsftpd > /dev/null");
-                cout << endl;
-                cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "*" << "\033[0m" << "\033[36m" << "] " << "FTP Instalado." << "\033[0m" << endl;
-                cout << endl;
-                cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Habilitando e iniciando el servicio." << "\033[0m" << endl;
-                system("systemctl enable vsftpd.service");
-                system("systemctl start vsftpd");
-            break;
+            cout << "1 // Instalar y configurar servidor FTP" << endl;
+            cout << "2 // Comprobar estado del servidor FTP" << endl;
+            opt[2] = getch();
+            switch(opt[2]) {
+                case '1': 
+                    banner();
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando FTP..." << "\033[0m" << endl;
+                    system("sudo apt-get install vsftpd > /dev/null");
+                    cout << endl;
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Habilitando e iniciando el servicio." << "\033[0m" << endl;
+                    system("sudo cp resources/ftp /etc/vsftpd.conf");
+                    system("sudo systemctl enable vsftpd.service > /dev/null");
+                    system("sudo systemctl start vsftpd > /dev/null");
+                    system("sudo touch /etc/vsftpd.userlist && sudo chmod 777 /etc/vsftpd.userlist");
+                    system("sudo echo root > /etc/vsftpd.userlist");
+                    banner();
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "*" << "\033[0m" << "\033[36m" << "] " << "FTP Instalado y configurado." << "\033[0m" << endl;
+                    cout << endl;
+                    cout << "Conéctese a la ip 192.168.79.100 desde el usuario root de esta máquina.";
+                    cout << "\n\nPresione cualquier botón para continuar...";
+                    getch();
+                    main();
+                    break;
+                case '2':
+                    banner();
+                    system("sudo systemctl status vsftpd");
+                    cout << "\n\nPresione cualquier botón para continuar...";
+                    getch();
+                    main();
+                    break;
+                default:
+                    cout << "Ha introducido un valor no válido" << endl;
+                    sleep(2);
+                    main();
+                    break;
+            }
         case '5': //- SSH
             banner();
-                cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando SSH..." << "\033[0m" << endl;
-                system("sudo apt install openssh-server -y ");
+            cout << "1 // Instalar y configurar servidor SSH" << endl;
+            cout << "2 // Comprobar estado del servidor SSH" << endl;
+            opt[3] = getch();
+            switch(opt[3]) {
+                case '1':
+                    banner();
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando SSH..." << "\033[0m" << endl;
+                    system("sudo apt install openssh-server -y > /dev/null");
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "SSH Instalado..." << "\033[0m" << endl;
+                    sleep(2);
+                    break;
+                case '2':
+                    banner();
+                    system("sudo systemctl status sshd");
+                    cout << "\n\nPresione cualquier botón para continuar...";
+                    getch();
+                    main();
+                    break;
+            }
             break;
         case '6': //- Update
             banner();
             cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando actualizaciones..." << "\033[0m" << endl << endl;
             system("sudo apt-get update -y && sudo apt-get upgrade");
             main();
+        case '7':
+            break;
         default: //- Opción incorrecta
             system("clear && figlet Error");
             cout << "Ha introducido una opción no válida." << endl;
-            return 1;
+            sleep(2);
+            break;
     }
+
+system("clear");
 
 return 0;
 }
