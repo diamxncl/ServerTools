@@ -34,7 +34,7 @@ int main () {
         case '1': //- DHCP
             banner();
             cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando DHCP..." << "\033[0m" << endl;
-            system("sudo apt-get install isc-dhcp-server > /dev/null");
+            system("sudo apt-get install isc-dhcp-server -y > /dev/null");
             system("sudo cp resources/dhcp-default /etc/default/isc-dhcp-server");
             system("sudo cp resources/dhcp-etc /etc/dhcp/dhcpd.conf");
             system("sudo systemctl restart isc-dhcp-server");
