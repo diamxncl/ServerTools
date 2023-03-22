@@ -1,6 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include <unistd.h>
+#include <string>
 
 using namespace std;
 
@@ -12,7 +13,9 @@ void banner () {
 int main () {
     //! DECLARACIÓN DE VARIABLES
 
-    char opt[5] = {'a', 'a', 'a', 'a',};
+    string str_backup = "sudo tar -czvf ./backups/$(date +'%Y-%m-%d_%H-%M-%S')-backup.tar.gz ";
+    string backup_folders[6] = {"/home ", "/etc ", "/root ", "/usr/local/bin ", "/usr/local/sbin ", "> /dev/null" };
+    char opt[6] = {'a', 'a', 'a', 'a', 'a', 'a'};
 
     //! FIN DECLARACIÓN DE VARIABLES
 
@@ -57,11 +60,85 @@ int main () {
                     main();
                     break;
             }
+            break;
         case '2': //- Backup
             banner();
-                cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Creando backup..." << "\033[0m" << endl;
+            cout << "1 // Crear backup" << endl;
+            cout << "2 // Ver backups creados" << endl;
+            opt[4] = getch();
+            switch (opt[4]) {
+                case '1':
+                    banner();
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Creando backup..." << "\033[0m" << endl;
+                    for (int i = 0; i < 6; i++) {
+                        str_backup += backup_folders[i];
+                    }
+                    system(str_backup.c_str());
+                    cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "*" << "\033[0m" << "\033[36m" << "] " << "Backup creado." << "\033[0m" << endl;
+                    cout << endl;
+                    system("ls backups/");
+                    cout << "\n\nPresione cualquier botón para continuar...";
+                    getch();
+                    main();
+                    break;
+                case '2':
+                    banner();
+                    system("ls backups/");
+                    cout << "\n\nPresione cualquier botón para continuar...";
+                    getch();
+                    main();
+                    break;
+                default:
+                    cout << "Ha introducido un valor no válido" << endl;
+                    sleep(2);
+                    main();
+                    break;
+            }
             break;
         case '3': //- ServerConfig, IP del servidor... (Útiles)
+                banner();
+                cout << "1 // Mostrar información acerca de la versión del sistema" << endl;
+                cout << "2 // Mostrar archivo de configuración de FTP" << endl;
+                cout << "3 // Mostrar archivos de configuración de DHCP" << endl;
+                cout << "4 // Mostrar información de red" << endl;
+                opt[5] = getch();
+                switch (opt[5]) {
+                    case '1':
+                        banner();
+                        system("sudo apt-get install screenfetch -y > /dev/null");
+                        system("screenfetch");
+                        cout << "\n\nPresione cualquier botón para continuar...";
+                        getch();
+                        main();
+                        break;
+                    case '2':
+                        banner();
+                        system("sudo cat /etc/vsftpd.conf");
+                        cout << "\n\nPresione cualquier botón para continuar...";
+                        getch();
+                        main();
+                        break;
+                    case '3':
+                        banner();
+                        system("sudo cat /etc/default/isc-dhcp-server");
+                        system("sudo cat /etc/dhcp/dhcpd.conf");
+                        cout << "\n\nPresione cualquier botón para continuar...";
+                        getch();
+                        main();
+                        break;
+                    case '4':
+                        banner();
+                        cout << "\n\nPresione cualquier botón para continuar...";
+                        system("sudo ip a");
+                        getch();
+                        main();
+                        break;
+                    default:
+                        cout << "Ha introducido un valor no válido" << endl;
+                        sleep(2);
+                        main();
+                        break;
+                }
             banner();
                 cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Mostrando configuraciones del servidor..." << "\033[0m" << endl;
             break;
@@ -85,7 +162,7 @@ int main () {
                     banner();
                     cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "*" << "\033[0m" << "\033[36m" << "] " << "FTP Instalado y configurado." << "\033[0m" << endl;
                     cout << endl;
-                    cout << "Conéctese a la ip 192.168.79.100 desde el usuario root de esta máquina.";
+                    cout << "Conéctese a la ip 192.168.79.100.\n\nftp 192.168.79.100";
                     cout << "\n\nPresione cualquier botón para continuar...";
                     getch();
                     main();
@@ -103,6 +180,7 @@ int main () {
                     main();
                     break;
             }
+            break;
         case '5': //- SSH
             banner();
             cout << "1 // Instalar y configurar servidor SSH" << endl;
@@ -112,9 +190,12 @@ int main () {
                 case '1':
                     banner();
                     cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "Instalando SSH..." << "\033[0m" << endl;
-                    system("sudo apt install openssh-server -y > /dev/null");
+                    system("sudo apt-get install openssh-server -y > /dev/null");
                     cout << "\033[36m" << "[" << "\033[0m" << "\033[32m" << "+" << "\033[0m" << "\033[36m" << "] " << "SSH Instalado..." << "\033[0m" << endl;
-                    sleep(2);
+                    cout << "Conéctese a la ip 192.168.79.100\n\nssh 192.168.79.100";
+                    cout << "\n\nPresione cualquier botón para continuar...";
+                    getch();
+                    main();
                     break;
                 case '2':
                     banner();

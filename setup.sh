@@ -12,11 +12,11 @@ echo ""
 # Main program
 sudo apt-get update -y > /dev/null && sudo apt-get upgrade -y > /dev/null
 sudo apt-get install make g++ -y >/dev/null
-git clone https://github.com/zoelabbb/conio.h > /dev/null
+sudo git clone https://github.com/zoelabbb/conio.h > /dev/null
 cd conio.h
 sudo make install
 cd ../
-g++ main.cpp -o ServerTools.out
+sudo g++ main.cpp -o ServerTools.out
 
 # Fin
 clear
