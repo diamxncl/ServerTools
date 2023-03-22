@@ -25,7 +25,7 @@ Then execute the setup.sh
   bash setup.sh
   ```
 
-Then execute it with:
+Then execute the main program
   ```bash
   sudo ./ServerTools.out
   ```
