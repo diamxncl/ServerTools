@@ -116,6 +116,7 @@ int main () {
                     case '1': //! INSTALACIÓN SCREENFETCH + MOSTRAR INFO
                         banner();
                         system("sudo apt-get install screenfetch -y > /dev/null");
+                        cout << "----- Información del sistema -----\n\n";
                         system("screenfetch");
                         cout << "\n\nPresione cualquier botón para continuar...";
                         getch();
@@ -123,6 +124,7 @@ int main () {
                         break;
                     case '2': //! MOSTRAR INFO FTP
                         banner();
+                        cout << "----- /etc/vsftpd.conf -----\n\n";
                         system("sudo cat /etc/vsftpd.conf");
                         cout << "\n\nPresione cualquier botón para continuar...";
                         getch();
@@ -140,8 +142,9 @@ int main () {
                         break;
                     case '4':
                         banner(); //! MOSTRAR INFO RED
-                        cout << "\n\nPresione cualquier botón para continuar...";
+                        cout << "----- Información de red -----\n\n";
                         system("sudo ip a");
+                        cout << "\n\nPresione cualquier botón para continuar...";
                         getch();
                         main();
                         break;
