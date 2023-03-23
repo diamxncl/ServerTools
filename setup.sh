@@ -18,7 +18,6 @@ sudo make install
 cd ../
 sudo g++ main.cpp -o ServerTools.out
 
-# Fin
 clear
 figlet Setup
 echo ""
